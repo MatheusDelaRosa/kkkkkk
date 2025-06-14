@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador de Senha & Classificação por Idade</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --roboto: 'Roboto', sans-serif;
+      --branco: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--roboto);
+      background: #000 url('a6d10b250fe1e459e43d323115f20b48.gif') no-repeat center center fixed;
+      background-size: contain;
+      color: var(--branco);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .conteudo {
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 800px;
+      width: 90%;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 20px #ff0000aa;
+    }
+
+    .bloco {
+      margin-bottom: 2rem;
+    }
+
+    .bloco-titulo {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    input[type="number"],
+    input[readonly],
+    button {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input[readonly] {
+      width: calc(100% - 110px);
+      margin-right: 10px;
+    }
+
+    #botao-gerar {
+      width: 90px;
+      background-color: #ff0000;
+      color: white;
+    }
+
+    #botao-copiar {
+      margin-top: 0.5rem;
+      background-color: #444;
+      color: white;
+    }
+
+    .senha-gerar {
+      display: flex;
+      align-items: center;
+    }
+
+    .parametro-senha-botoes {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .barra-forca {
+      height: 10px;
+      background-color: #333;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+
+    .nivel-forca {
+      height: 100%;
+      transition: width 0.3s;
+    }
+
+    .nivel-fraco {
+      width: 33%;
+      background-color: red;
+    }
+
+    .nivel-medio {
+      width: 66%;
+      background-color: orange;
+    }
+
+    .nivel-forte {
+      width: 100%;
+      background-color: green;
+    }
+
+    .parametro-senha-checkbox {
+      margin: 0.5rem 0;
+    }
+
+    .idade-input {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .texto-menor {
+      font-size: 0.85rem;
+    }
+
+    /* Quadro Dourado */
+    .quadro-dourado {
+      border: 2px solid rgb(85, 223, 51);
+      background: linear-gradient(145deg, rgba(0,0,0,0.6), rgba(40,40,40,0.4));
+      box-shadow: 0 0 15px rgb(236, 92, 35), inset 0 0 10px #ffdf00aa;
+      padding: 1.5rem;
+      border-radius: 16px;
+      margin-top: 2rem;
+    }
+
+    .quadro-dourado .bloco-titulo {
+      color: gold;
+      font-weight: bold;
+      text-shadow: 0 0 5px gold;
+    }
+
+    .quadro-dourado p {
+      color: #fff9c4;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <main class="conteudo">
+
+    <!-- Gerador de Senha -->
+    <section class="bloco">
+      <h2 class="bloco-titulo">Gerador de Senhas</h2>
+
+      <div class="senha-gerar">
+        <input id="campo-senha" readonly placeholder="Clique em Gerar" />
+        <button id="botao-gerar">Gerar</button>
+      </div>
+
+      <div class="copiar-container">
+        <button id="botao-copiar" class="texto-menor">Copiar Senha</button>
+      </div>
+
+      <div class="parametro-senha-botoes">
+        <button id="btn-diminuir" class="parametro-senha__botao">−</button>
+        <span id="numero-senha-texto" class="parametro-senha__texto">12</span>
+        <button id="btn-aumentar" class="parametro-senha__botao">+</button>
+      </div>
+
+      <div class="barra-forca">
+        <div id="nivelForca" class="nivel-forca nivel-fraco"></div>
+      </div>
+      <p id="entropia-texto" class="texto-menor"></p>
+    </section>
+
+    <!-- Histórico -->
+    <section class="bloco">
+      <h2 class="bloco-titulo">Últimas Senhas Geradas</h2>
+      <ul id="historico-senhas" class="texto-menor"></ul>
+    </section>
+
+    <!-- Opções -->
+    <section class="bloco">
+      <h2 class="bloco-titulo">Opções de Caracteres</h2>
+      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-maiusculas" checked> Letras Maiúsculas</div>
+      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-minusculas" checked> Letras Minúsculas</div>
+      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-numeros"> Números</div>
+      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-simbolos"> Símbolos</div>
+      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-especiais"> Especiais</div>
+    </section>
+
+    <!-- Classificação -->
+    <section class="bloco">
+      <h2 class="bloco-titulo">Classificação por Idade</h2>
+      <div class="idade-input">
+        <input id="idadeInput" type="number" placeholder="Sua idade" />
+        <button id="botao-verificar">Verificar</button>
+      </div>
+      <div class="barra-forca">
+        <div id="barraIdade" class="nivel-forca nivel-fraco"></div>
+      </div>
+      <p id="resultadoIdade" class="texto-menor"></p>
+    </section>
+
+    <!-- Quadro Dourado -->
+    <section class="bloco quadro-dourado">
+      <h2 class="bloco-titulo">Aviso Importante</h2>
+      <p class="texto-menor">
+        Use uma combinação de letras, números e símbolos para gerar senhas mais seguras.<br>
+        Lembre-se: senhas fortes protegem seus dados e sua privacidade!
+      </p>
+    </section>
+
+  </main>
+
+  <script>
+    const campoSenha = document.getElementById('campo-senha');
+    const btnGerar = document.getElementById('botao-gerar');
+    const btnCopiar = document.getElementById('botao-copiar');
+    const btnMais = document.getElementById('btn-aumentar');
+    const btnMenos = document.getElementById('btn-diminuir');
+    const spanTamanho = document.getElementById('numero-senha-texto');
+    const historico = document.getElementById('historico-senhas');
+    const barraForca = document.getElementById('nivelForca');
+    const textoEntropia = document.getElementById('entropia-texto');
+
+    const chkMai = document.getElementById('chk-maiusculas');
+    const chkMin = document.getElementById('chk-minusculas');
+    const chkNum = document.getElementById('chk-numeros');
+    const chkSim = document.getElementById('chk-simbolos');
+    const chkEsp = document.getElementById('chk-especiais');
+
+    const alphaSets = {
+      mai: 'ABCDEFGHIJKLMNOPQRSTUVXYWZ',
+      min: 'abcdefghijklmnopqrstuvxywz',
+      num: '0123456789',
+      sim: '!@%*?',
+      esp: '~^&*()_+-=[]{};:,.<>?'
+    };
+
+    let tamanho = 12;
+    let ultimasSenhas = [];
+
+    function atualizaTamanho() {
+      spanTamanho.textContent = tamanho;
+    }
+
+    function gerarSenha() {
+      let alfabeto = '';
+      if (chkMai.checked) alfabeto += alphaSets.mai;
+      if (chkMin.checked) alfabeto += alphaSets.min;
+      if (chkNum.checked) alfabeto += alphaSets.num;
+      if (chkSim.checked) alfabeto += alphaSets.sim;
+      if (chkEsp.checked) alfabeto += alphaSets.esp;
+
+      if (!alfabeto) {
+        campoSenha.value = 'Selecione opções';
+        return;
+      }
+
+      let senha = '';
+      for (let i = 0; i < tamanho; i++) {
+        senha += alfabeto[Math.floor(Math.random() * alfabeto.length)];
+      }
+
+      campoSenha.value = senha;
+      atualizarHistorico(senha);
+      avaliarForca(alfabeto.length);
+    }
+
+    function atualizarHistorico(senha) {
+      ultimasSenhas.unshift(senha);
+      if (ultimasSenhas.length > 3) ultimasSenhas.pop();
+
+      historico.innerHTML = '';
+      ultimasSenhas.forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        historico.appendChild(li);
+      });
+    }
+
+    function avaliarForca(alfabetoTamanho) {
+      const entropia = tamanho * Math.log2(alfabetoTamanho);
+      const dias = Math.floor((2 ** entropia) / (100e6 * 60 * 60 * 24));
+      barraForca.className = 'nivel-forca';
+      if (entropia > 57) barraForca.classList.add('nivel-forte');
+      else if (entropia > 35) barraForca.classList.add('nivel-medio');
+      else barraForca.classList.add('nivel-fraco');
+      textoEntropia.textContent = `Até ${dias} dias para quebrar.`;
+    }
+
+    function copiarSenha() {
+      if (!campoSenha.value) return;
+      navigator.clipboard.writeText(campoSenha.value).then(() => {
+        btnCopiar.textContent = 'Copiado!';
+        setTimeout(() => btnCopiar.textContent = 'Copiar Senha', 1500);
+      });
+    }
+
+    btnGerar.onclick = gerarSenha;
+    btnCopiar.onclick = copiarSenha;
+    btnMais.onclick = () => { if (tamanho < 20) { tamanho++; atualizaTamanho(); gerarSenha(); } };
+    btnMenos.onclick = () => { if (tamanho > 1) { tamanho--; atualizaTamanho(); gerarSenha(); } };
+    [chkMai, chkMin, chkNum, chkSim, chkEsp].forEach(c => c.onchange = gerarSenha);
+
+    atualizaTamanho();
+
+    const inputIdade = document.getElementById('idadeInput');
+    const botaoVerificar = document.getElementById('botao-verificar');
+    const barraIdade = document.getElementById('barraIdade');
+    const resultadoIdade = document.getElementById('resultadoIdade');
+
+    botaoVerificar.onclick = () => {
+      const idade = Number(inputIdade.value);
+      let nivel = '', texto = '';
+
+      if (idade < 0) {
+        texto = 'Inválido';
+      } else if (idade < 13) {
+        nivel = 'nivel-fraco'; texto = 'Criança';
+      } else if (idade < 18) {
+        nivel = 'nivel-medio'; texto = 'Adolescente';
+      } else {
+        nivel = 'nivel-forte'; texto = 'Adulto';
+      }
+
+      barraIdade.className = 'nivel-forca ' + nivel;
+      resultadoIdade.textContent = texto;
+    };
+  </script>
+</body>
+</html>

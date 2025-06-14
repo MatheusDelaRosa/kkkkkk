@@ -1,0 +1,326 @@
+/* style.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono&display=swap');
+
+:root {
+  --branco: #ffffff;
+  --fundo-bloco: rgba(0, 48, 105, 0.5); /* azul mais escuro e translúcido */
+  --borda: #0075ff;
+  --texto-sec: #a0cfff;
+  --roboto: 'Roboto', sans-serif;
+  --roboto-mono: 'Roboto Mono', monospace;
+}
+
+/* Reset e box‐sizing */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fundo animado */
+body {
+  font-family: var(--roboto);
+  background: url('eb8de1566a0b5d119fe83f0870cfb581.gif') no-repeat center center fixed;
+  background-size: contain; /* <-- Mostra o GIF inteiro sem cortar */
+  background-color: #000;   /* Fundo preto caso a imagem não cubra tudo */
+  color: var(--branco);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  backdrop-filter: blur(2px);
+  z-index: -1;
+}
+
+/* Container geral */
+.conteudo {
+  width: 90%;           /* ocupa 90% da largura da tela */
+  max-width: 600px;     /* limite máximo maior, pode ajustar */
+  background: var(--fundo-bloco);
+  border-radius: 12px;
+  padding: 2rem;        /* espaço interno para o texto "respirar" */
+  backdrop-filter: blur(5px);
+  margin-left: auto;
+  margin-right: auto;   /* centraliza o bloco */
+}
+
+/* Blocos sequenciais */
+.bloco + .bloco {
+  margin-top: 1.5rem;
+}
+
+/* Título de seção */
+.bloco-titulo {
+  font-family: var(--roboto-mono);
+  font-size: 1.5rem;
+  color: var(--texto-sec);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Linha de input + botão */
+.senha-gerar,
+.idade-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Inputs de senha e idade */
+.senha-gerar input,
+.idade-input input {
+  flex: 1;
+  padding: 0.5rem;
+  font-family: var(--roboto-mono);
+  background: rgba(0,36,77,0.25);
+  border: none;
+  border-radius: 6px;
+  color: var(--branco);
+}
+.senha-gerar input::placeholder,
+.idade-input input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+/* Botões principais */
+.senha-gerar button,
+.idade-input button {
+  background: var(--borda);
+  border: none;
+  color: var(--branco);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.senha-gerar button:hover,
+.idade-input button:hover {
+  background: #005ecb;
+}
+
+/* Temporizador */
+.texto-menor {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.8);
+  text-align: center;
+  min-height: 1.2em;
+}
+
+/* QR e download */
+#qrcode { text-align: center; margin: 0.5rem 0; }
+#botao-baixar {
+  display: block;
+  margin: 0 auto 0.75rem;
+  background: var(--borda);
+  border: none;
+  color: var(--branco);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+#botao-baixar:hover {
+  background: #005ecb;
+}
+
+/* Barra de força (senha e idade) */
+.barra-forca {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.2);
+  overflow: hidden;
+  margin: 0.75rem auto;
+  width: 80%;
+  max-width: 300px;
+}
+.nivel-forca {
+  width: 100%;
+  height: 24px;
+  border-radius: 16px;
+  background: #eee;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.4s ease;
+}
+
+.nivel-forca::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 0;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #4a90e2, #357ABD);
+  box-shadow:
+    0 0 10px rgba(74, 144, 226, 0.7),
+    inset 0 0 8px rgba(255, 255, 255, 0.6);
+  transition: width 0.5s ease;
+}
+
+/* Níveis de força com cores diferentes para o fundo da barra */
+.nivel-fraco {
+  background-color: #fce4e4;
+}
+
+.nivel-fraco::before {
+  width: 25%;
+  background: linear-gradient(90deg, #e04a4a, #b73535);
+  box-shadow:
+    0 0 10px rgba(224, 74, 74, 0.7),
+    inset 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.nivel-medio {
+  background-color: #fff7e6;
+}
+
+.nivel-medio::before {
+  width: 60%;
+  background: linear-gradient(90deg, #f5a623, #c77c0d);
+  box-shadow:
+    0 0 10px rgba(245, 166, 35, 0.7),
+    inset 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.nivel-forte {
+  background-color: #e3f7e7;
+}
+
+.nivel-forte::before {
+  width: 100%;
+  background: linear-gradient(90deg, #4caf50, #357a38);
+  box-shadow:
+    0 0 10px rgba(76, 175, 80, 0.8),
+    inset 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+/* Controles de quantidade de caracteres */
+.parametro-senha-botoes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.parametro-senha__botao {
+  padding: 0.5rem 1rem;
+  background: var(--borda);
+  border: none;
+  border-radius: 6px;
+  color: var(--branco);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-family: var(--roboto-mono);
+}
+.parametro-senha__botao:hover {
+  background: #005ecb;
+}
+.parametro-senha__botao:active {
+  transform: scale(0.97);
+}
+
+.parametro-senha__texto {
+  font-family: var(--roboto-mono);
+  font-size: 1.2rem;
+  min-width: 40px;
+  text-align: center;
+  color: var(--branco);
+}
+
+/* Checkboxes estilizados */
+.parametro-senha-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.parametro-senha-checkbox input {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .conteudo { padding: 1rem; width: 80%; max-width: none; }
+  .bloco-titulo { font-size: 1.25rem; }
+  .senha-gerar input,
+  .idade-input input { font-size: 1rem; }
+  .senha-gerar button,
+  .idade-input button { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+  .parametro-senha-botoes { gap: 0.25rem; }
+}
+
+#botao-copiar {
+  background-color: #0066cc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+#botao-copiar:hover {
+  background-color: #004999;
+  transform: scale(1.03);
+}
+
+#botao-copiar:active {
+  transform: scale(0.97);
+}
+
+.copiar-container {
+  text-align: left;
+  margin-top: 10px;
+  padding-left: 1px; /* ou margin-left: 10px; */
+}
+body {
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  image-rendering: auto !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  transform: translateZ(0);
+}
+
+/* Quadro Dourado Melhorado */
+.quadro-dourado {
+  border: 2px solid #FFD700;
+  background: linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(255, 255, 255, 0.05));
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255, 223, 0, 0.4);
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-top: 2rem;
+  transition: all 0.3s ease;
+}
+
+.quadro-dourado .bloco-titulo {
+  color: #09ff00;
+  font-weight: bold;
+  font-size: 1.6rem;
+  text-shadow: 0 0 6px rgba(255, 255, 200, 0.8);
+  margin-bottom: 1rem;
+}
+
+.quadro-dourado p {
+  color: #fffbe6;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+}
