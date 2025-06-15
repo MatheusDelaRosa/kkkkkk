@@ -7,6 +7,8 @@ const letrasMinusculas = 'abcdefghijklmnopqrstuvxywz';
 const numeros = '0123456789';
 const simbolos = '!@%*?';
 const caracteresEspeciais = '©®™€¥±µ∞•¶§¤';
+const caracteresUnicode = 'áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ';
+const emojis = '😀😃😄😁😆😅😂🤣😊😇😉😍😘😜🤪😎🤩';
 
 const btnDiminuir = document.querySelector('#btn-diminuir');
 const btnAumentar = document.querySelector('#btn-aumentar');
@@ -85,6 +87,8 @@ function geraSenha() {
     if (checkbox[2].checked) alfabeto += numeros;
     if (checkbox[3].checked) alfabeto += simbolos;
     if (checkbox[4] && checkbox[4].checked) alfabeto += caracteresEspeciais;
+    if (checkbox[5] && checkbox[5].checked) alfabeto += caracteresUnicode;  // Unicode
+    if (checkbox[6] && checkbox[6].checked) alfabeto += emojis;              // Emojis
 
     if (alfabeto.length === 0) {
         campoSenha.value = 'Selecione ao menos 1 opção!';
@@ -109,7 +113,7 @@ function geraSenha() {
 function classificaSenha(tamanhoAlfabeto) {
     const entropia = tamanhoSenha * Math.log2(tamanhoAlfabeto);
     const dias = Math.floor((2 ** entropia) / (100e6 * 60 * 60 * 24));
-    valorEntropia.textContent = `Um computador pode levar até ${dias} dias para descobrir essa senha.`;
+    valorEntropia.textContent = `Um computador pode levar até ${dias.toLocaleString('pt-BR')} dias para descobrir essa senha.`;
 
     if (entropia > 57) {
         nivelForca.style.width = '100%';

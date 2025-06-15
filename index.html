@@ -4,145 +4,283 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gerador de Senha & Classificação por Idade</title>
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --roboto: 'Roboto', sans-serif;
-      --branco: #ffffff;
+      --fonte: 'Roboto', sans-serif;
+      --cor-fundo: #121212;
+      --cor-fundo-bloco: rgba(25, 25, 25, 0.85);
+      --cor-destaque: #4ade80; /* verde limão suave */
+      --cor-ativo: #3b82f6; /* azul vibrante */
+      --cor-aviso: #21e931; /* amarelo */
+      --cor-alerta: #ef4444; /* vermelho */
+      --cor-texto: #e0e0e0;
+      --cor-texto-secundario: #a0a0a0;
+      --borda-destaque: 2px solid var(--cor-ativo);
+      --radius: 12px;
+      --sombra: 0 4px 15px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      font-family: var(--roboto);
-      background: #000 url('a6d10b250fe1e459e43d323115f20b48.gif') no-repeat center center fixed;
-      background-size: contain;
-      color: var(--branco);
+      font-family: var(--fonte);
+      background-color: var(--cor-fundo);
+      background-image: url('a6d10b250fe1e459e43d323115f20b48.gif');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: cover;
+      color: var(--cor-texto);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 2rem;
     }
 
     .conteudo {
-      background-color: rgba(0, 0, 0, 0.75);
-      padding: 2rem;
-      border-radius: 20px;
-      max-width: 800px;
-      width: 90%;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 20px #ff0000aa;
+      background-color: var(--cor-fundo-bloco);
+      padding: 2rem 2.5rem;
+      border-radius: var(--radius);
+      max-width: 900px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--sombra);
+      border: 1px solid #333;
     }
 
     .bloco {
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     .bloco-titulo {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: var(--cor-ativo);
+      text-shadow: 0 0 8px var(--cor-ativo);
+      user-select: none;
     }
 
     input[type="number"],
     input[readonly],
     button {
-      padding: 0.5rem;
-      margin: 0.25rem 0;
-      border-radius: 8px;
+      font-family: var(--fonte);
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius);
       border: none;
       font-size: 1rem;
+      outline-offset: 2px;
+      transition: background-color 0.3s, box-shadow 0.3s;
     }
 
     input[readonly] {
-      width: calc(100% - 110px);
-      margin-right: 10px;
+      flex: 1;
+      margin-right: 1rem;
+      background-color: #222;
+      color: var(--cor-texto);
+      user-select: all;
+      cursor: text;
     }
 
-    #botao-gerar {
-      width: 90px;
-      background-color: #ff0000;
-      color: white;
+    input[type="number"] {
+      width: 120px;
+      background-color: #222;
+      color: var(--cor-texto);
+      border: 1px solid #444;
+    }
+
+    input[type="number"]:focus,
+    input[readonly]:focus {
+      box-shadow: 0 0 6px var(--cor-ativo);
+      border-color: var(--cor-ativo);
+    }
+
+    button {
+      cursor: pointer;
+      background-color: var(--cor-ativo);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.5);
+      border: none;
+    }
+
+    button:hover,
+    button:focus {
+      background-color: #2563eb;
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.75);
     }
 
     #botao-copiar {
-      margin-top: 0.5rem;
       background-color: #444;
-      color: white;
+      width: 100%;
+      margin-top: 0.7rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #botao-copiar:hover,
+    #botao-copiar:focus {
+      background-color: #666;
     }
 
     .senha-gerar {
       display: flex;
       align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     .parametro-senha-botoes {
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin-top: 1rem;
+      margin-top: 1.1rem;
+      user-select: none;
+    }
+
+    .parametro-senha__botao {
+      padding: 0.45rem 1rem;
+      background-color: #222;
+      color: var(--cor-destaque);
+      border: var(--borda-destaque);
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: var(--radius);
+      user-select: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .parametro-senha__botao:hover,
+    .parametro-senha__botao:focus {
+      background-color: var(--cor-destaque);
+      color: var(--cor-fundo);
+      border-color: var(--cor-destaque);
+      box-shadow: 0 0 10px var(--cor-destaque);
+    }
+
+    .parametro-senha__texto {
+      font-size: 1.3rem;
+      font-weight: 700;
+      min-width: 25px;
+      text-align: center;
+      color: var(--cor-destaque);
+      text-shadow: 0 0 4px var(--cor-destaque);
+      user-select: none;
     }
 
     .barra-forca {
-      height: 10px;
-      background-color: #333;
-      border-radius: 5px;
+      height: 12px;
+      background-color: #2a2a2a;
+      border-radius: 8px;
       overflow: hidden;
-      margin: 0.5rem 0;
+      margin: 0.6rem 0 0.8rem 0;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
     }
 
     .nivel-forca {
       height: 100%;
-      transition: width 0.3s;
+      width: 0;
+      transition: width 0.4s ease, background-color 0.4s ease;
+      border-radius: 8px;
     }
 
     .nivel-fraco {
       width: 33%;
-      background-color: red;
+      background-color: var(--cor-alerta);
+      box-shadow: 0 0 8px var(--cor-alerta);
     }
 
     .nivel-medio {
       width: 66%;
-      background-color: orange;
+      background-color: var(--cor-aviso);
+      box-shadow: 0 0 8px var(--cor-aviso);
     }
 
     .nivel-forte {
       width: 100%;
-      background-color: green;
+      background-color: var(--cor-destaque);
+      box-shadow: 0 0 10px var(--cor-destaque);
     }
 
     .parametro-senha-checkbox {
-      margin: 0.5rem 0;
+      margin: 0.4rem 0;
+      user-select: none;
+    }
+
+    .parametro-senha-checkbox input {
+      margin-right: 0.5rem;
+      cursor: pointer;
     }
 
     .idade-input {
       display: flex;
       gap: 1rem;
       align-items: center;
+      user-select: none;
     }
 
     .texto-menor {
       font-size: 0.85rem;
+      color: var(--cor-texto-secundario);
+      user-select: none;
     }
 
-    /* Quadro Dourado */
+    ul#historico-senhas {
+      padding-left: 1.3rem;
+      max-height: 120px;
+      overflow-y: auto;
+      color: var(--cor-texto-secundario);
+      font-family: monospace;
+    }
+
+    ul#historico-senhas li {
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+
+    /* Quadro Dourado com efeito neon suave */
     .quadro-dourado {
-      border: 2px solid rgb(85, 223, 51);
-      background: linear-gradient(145deg, rgba(0,0,0,0.6), rgba(40,40,40,0.4));
-      box-shadow: 0 0 15px rgb(236, 92, 35), inset 0 0 10px #ffdf00aa;
-      padding: 1.5rem;
-      border-radius: 16px;
-      margin-top: 2rem;
-    }
-
-    .quadro-dourado .bloco-titulo {
-      color: gold;
-      font-weight: bold;
-      text-shadow: 0 0 5px gold;
+      border: 2px solid var(--cor-aviso);
+      background: linear-gradient(135deg, rgba(25, 25, 25, 0.8), rgba(40, 40, 40, 0.7));
+      box-shadow: 0 0 10px var(--cor-aviso), 0 0 25px rgba(250, 204, 21, 0.5), inset 0 0 8px rgba(255, 255, 255, 0.15);
+      padding: 1.7rem 2rem;
+      border-radius: var(--radius);
+      margin-top: 2.5rem;
+      user-select: none;
     }
 
     .quadro-dourado p {
-      color: #fff9c4;
-      line-height: 1.5;
+      color: #fff9d9;
+      line-height: 1.6;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .quadro-dourado .bloco-titulo {
+      color: var(--cor-aviso);
+      text-align: center;
+      text-shadow: 0 0 12px var(--cor-aviso);
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      user-select: none;
+    }
+
+    /* Scrollbar customizado para o histórico */
+    ul#historico-senhas::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ul#historico-senhas::-webkit-scrollbar-thumb {
+      background-color: var(--cor-ativo);
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -155,60 +293,89 @@
 
       <div class="senha-gerar">
         <input id="campo-senha" readonly placeholder="Clique em Gerar" />
-        <button id="botao-gerar">Gerar</button>
+        <button id="botao-gerar" aria-label="Gerar senha">Gerar</button>
       </div>
 
-      <div class="copiar-container">
-        <button id="botao-copiar" class="texto-menor">Copiar Senha</button>
+      <button id="botao-copiar" class="texto-menor" aria-label="Copiar senha gerada">Copiar Senha</button>
+
+      <div class="parametro-senha-botoes" aria-label="Ajustar tamanho da senha">
+        <button id="btn-diminuir" class="parametro-senha__botao" aria-label="Diminuir tamanho da senha">−</button>
+        <span id="numero-senha-texto" class="parametro-senha__texto" aria-live="polite" aria-atomic="true">12</span>
+        <button id="btn-aumentar" class="parametro-senha__botao" aria-label="Aumentar tamanho da senha">+</button>
       </div>
 
-      <div class="parametro-senha-botoes">
-        <button id="btn-diminuir" class="parametro-senha__botao">−</button>
-        <span id="numero-senha-texto" class="parametro-senha__texto">12</span>
-        <button id="btn-aumentar" class="parametro-senha__botao">+</button>
-      </div>
-
-      <div class="barra-forca">
+      <div class="barra-forca" aria-label="Indicador de força da senha">
         <div id="nivelForca" class="nivel-forca nivel-fraco"></div>
       </div>
-      <p id="entropia-texto" class="texto-menor"></p>
+      <p id="entropia-texto" class="texto-menor" aria-live="polite"></p>
     </section>
 
     <!-- Histórico -->
     <section class="bloco">
       <h2 class="bloco-titulo">Últimas Senhas Geradas</h2>
-      <ul id="historico-senhas" class="texto-menor"></ul>
+      <ul id="historico-senhas" class="texto-menor" aria-live="polite" aria-atomic="true"></ul>
     </section>
 
     <!-- Opções -->
-    <section class="bloco">
-      <h2 class="bloco-titulo">Opções de Caracteres</h2>
-      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-maiusculas" checked> Letras Maiúsculas</div>
-      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-minusculas" checked> Letras Minúsculas</div>
-      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-numeros"> Números</div>
-      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-simbolos"> Símbolos</div>
-      <div class="parametro-senha-checkbox"><input type="checkbox" id="chk-especiais"> Especiais</div>
-    </section>
+ <section class="bloco">
+  <h2 class="bloco-titulo">Opções de Caracteres</h2>
+  
+  <div class="parametro-senha-checkbox">
+    <input type="checkbox" id="chk-maiusculas" checked>
+    <label for="chk-maiusculas">Letras Maiúsculas</label>
+  </div>
+  
+  <div class="parametro-senha-checkbox">
+    <input type="checkbox" id="chk-minusculas" checked>
+    <label for="chk-minusculas">Letras Minúsculas</label>
+  </div>
+  
+  <!-- Movei essas opções para logo depois de "Letras Minúsculas" -->
+  <div class="parametro-senha-checkbox">
+    <input type="checkbox" id="chk-especiais" checked>
+    <label for="chk-especiais">Caracteres Especiais</label>
+  </div>
+  
+  <div class="parametro-senha-checkbox">
+    <input type="checkbox" id="chk-emojis" checked>
+    <label for="chk-emojis">Emojis</label>
+  </div>
+  
+  <div class="parametro-senha-checkbox">
+    <input type="checkbox" id="chk-numeros">
+    <label for="chk-numeros">Números</label>
+  </div>
+  
+  <div class="parametro-senha-checkbox">
+    <input type="checkbox" id="chk-simbolos">
+    <label for="chk-simbolos">Símbolos</label>
+  </div>
+
+  <div class="parametro-senha-checkbox">
+    <input type="checkbox" id="chk-unicode">
+    <label for="chk-unicode">Caracteres Unicode</label>
+  </div>
+</section>
 
     <!-- Classificação -->
     <section class="bloco">
       <h2 class="bloco-titulo">Classificação por Idade</h2>
       <div class="idade-input">
-        <input id="idadeInput" type="number" placeholder="Sua idade" />
-        <button id="botao-verificar">Verificar</button>
+        <input id="idadeInput" type="number" min="0" placeholder="Sua idade" aria-label="Digite sua idade" />
+        <button id="botao-verificar" aria-label="Verificar classificação por idade">Verificar</button>
       </div>
-      <div class="barra-forca">
+      <div class="barra-forca" aria-label="Indicador de classificação por idade">
         <div id="barraIdade" class="nivel-forca nivel-fraco"></div>
       </div>
-      <p id="resultadoIdade" class="texto-menor"></p>
+      <p id="resultadoIdade" class="texto-menor" aria-live="polite"></p>
     </section>
 
     <!-- Quadro Dourado -->
-    <section class="bloco quadro-dourado">
-      <h2 class="bloco-titulo">Aviso Importante</h2>
-      <p class="texto-menor">
-        Use uma combinação de letras, números e símbolos para gerar senhas mais seguras.<br>
-        Lembre-se: senhas fortes protegem seus dados e sua privacidade!
+    <section class="bloco quadro-dourado" role="region" aria-labelledby="aviso-importante-titulo">
+      <h2 id="aviso-importante-titulo" class="bloco-titulo">Aviso Importante</h2>
+      <p>
+        Utilize combinações fortes de letras, números e símbolos para proteger seus dados. <br />
+        <strong>Senhas fortes = maior segurança digital!</strong>
       </p>
     </section>
 
@@ -256,6 +423,8 @@
 
       if (!alfabeto) {
         campoSenha.value = 'Selecione opções';
+        barraForca.className = 'nivel-forca nivel-fraco';
+        textoEntropia.textContent = '';
         return;
       }
 
@@ -272,7 +441,6 @@
     function atualizarHistorico(senha) {
       ultimasSenhas.unshift(senha);
       if (ultimasSenhas.length > 3) ultimasSenhas.pop();
-
       historico.innerHTML = '';
       ultimasSenhas.forEach(s => {
         const li = document.createElement('li');
@@ -283,16 +451,19 @@
 
     function avaliarForca(alfabetoTamanho) {
       const entropia = tamanho * Math.log2(alfabetoTamanho);
+      // calcula "dias para quebrar" assumindo 100 milhões de tentativas por segundo
       const dias = Math.floor((2 ** entropia) / (100e6 * 60 * 60 * 24));
+
       barraForca.className = 'nivel-forca';
       if (entropia > 57) barraForca.classList.add('nivel-forte');
       else if (entropia > 35) barraForca.classList.add('nivel-medio');
       else barraForca.classList.add('nivel-fraco');
-      textoEntropia.textContent = `Até ${dias} dias para quebrar.`;
+
+      textoEntropia.textContent = dias > 0 ? `Até ${dias.toLocaleString('pt-BR')} dias para quebrar.` : 'Senha muito fraca.';
     }
 
     function copiarSenha() {
-      if (!campoSenha.value) return;
+      if (!campoSenha.value || campoSenha.value === 'Selecione opções') return;
       navigator.clipboard.writeText(campoSenha.value).then(() => {
         btnCopiar.textContent = 'Copiado!';
         setTimeout(() => btnCopiar.textContent = 'Copiar Senha', 1500);
@@ -301,33 +472,47 @@
 
     btnGerar.onclick = gerarSenha;
     btnCopiar.onclick = copiarSenha;
-    btnMais.onclick = () => { if (tamanho < 20) { tamanho++; atualizaTamanho(); gerarSenha(); } };
-    btnMenos.onclick = () => { if (tamanho > 1) { tamanho--; atualizaTamanho(); gerarSenha(); } };
-    [chkMai, chkMin, chkNum, chkSim, chkEsp].forEach(c => c.onchange = gerarSenha);
+
+    btnMais.onclick = () => {
+      if (tamanho < 32) {
+        tamanho++;
+        atualizaTamanho();
+      }
+    };
+
+    btnMenos.onclick = () => {
+      if (tamanho > 6) {
+        tamanho--;
+        atualizaTamanho();
+      }
+    };
 
     atualizaTamanho();
 
-    const inputIdade = document.getElementById('idadeInput');
+    // Classificação por idade
+    const idadeInput = document.getElementById('idadeInput');
     const botaoVerificar = document.getElementById('botao-verificar');
     const barraIdade = document.getElementById('barraIdade');
     const resultadoIdade = document.getElementById('resultadoIdade');
 
     botaoVerificar.onclick = () => {
-      const idade = Number(inputIdade.value);
-      let nivel = '', texto = '';
-
-      if (idade < 0) {
-        texto = 'Inválido';
-      } else if (idade < 13) {
-        nivel = 'nivel-fraco'; texto = 'Criança';
-      } else if (idade < 18) {
-        nivel = 'nivel-medio'; texto = 'Adolescente';
-      } else {
-        nivel = 'nivel-forte'; texto = 'Adulto';
+      const idade = parseInt(idadeInput.value, 10);
+      if (isNaN(idade) || idade < 0) {
+        resultadoIdade.textContent = 'Por favor, insira uma idade válida.';
+        barraIdade.className = 'nivel-forca nivel-fraco';
+        return;
       }
 
-      barraIdade.className = 'nivel-forca ' + nivel;
-      resultadoIdade.textContent = texto;
+      if (idade < 12) {
+        resultadoIdade.textContent = 'Classificação: Criança';
+        barraIdade.className = 'nivel-forca nivel-fraco';
+      } else if (idade < 18) {
+        resultadoIdade.textContent = 'Classificação: Adolescente';
+        barraIdade.className = 'nivel-forca nivel-medio';
+      } else {
+        resultadoIdade.textContent = 'Classificação: Adulto';
+        barraIdade.className = 'nivel-forca nivel-forte';
+      }
     };
   </script>
 </body>
